@@ -12,52 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sys import argv
-
-from requests import get
-
 from opentelemetry import trace
-from opentelemetry.propagate import inject
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (
-    BatchSpanProcessor,
-    ConsoleSpanExporter,
-)
-
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
     OTLPSpanExporter,
 )
-
-from opentelemetry.exporter.otlp.proto.grpc._metric_exporter import (
-    OTLPMetricExporter,
-)
-
+from opentelemetry.propagate import inject
 from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
+)
+from requests import get
+from sys import argv
 
 resource = Resource(attributes={
     "service.name": "service"
 })
 
 otlp_exporter = OTLPSpanExporter(
-    # optional
-    # credentials=ChannelCredentials(credentials),
-    # headers=(("metadata", "metadata")),
-)
+    endpoint="localhost:9095",
+    insecure=True)
 
 tracer_provider = TracerProvider(resource=resource)
 trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-span_processor = BatchSpanProcessor(otlp_exporter)
-tracer_provider.add_span_processor(span_processor)
-
-# trace.get_tracer_provider().add_span_processor(
-#     BatchSpanProcessor(ConsoleSpanExporter())
-# )
-
+span_processor_otlp = BatchSpanProcessor(otlp_exporter)
+tracer_provider.add_span_processor(span_processor_otlp)
 
 with tracer.start_as_current_span("client"):
-
     with tracer.start_as_current_span("client-server"):
         headers = {}
         inject(headers)
@@ -68,7 +51,3 @@ with tracer.start_as_current_span("client"):
         )
 
         assert requested.status_code == 200
-
-metric_exporter = OTLPMetricExporter()
-metrics.set_meter_provider(MeterProvider())
-meter = metrics.get_meter(__name__)

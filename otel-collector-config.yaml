@@ -19,6 +19,11 @@ exporters:
     endpoint: jaeger-all-in-one:14250
     tls:
       insecure: true
+      
+  otlp/2:
+    endpoint: ${DOCKER_GATEWAY_HOST:-host.docker.internal}:9095
+    tls:
+      insecure: true
 
 processors:
   batch:

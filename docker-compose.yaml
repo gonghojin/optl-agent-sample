@@ -52,6 +52,17 @@ services:
       - "7080"
     depends_on:
       - otel-collector
+      
+  django-server-demo:
+    build:
+      dockerfile: Dockerfile
+      context: ./django/server
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+    ports:
+      - "8002:8000"
+    depends_on:
+      - otel-collector
 
   prometheus:
     container_name: prometheus-v1

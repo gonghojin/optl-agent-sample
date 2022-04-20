@@ -12,22 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from django.http import HttpResponse
-
 from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+    OTLPSpanExporter,
+)
+from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
-    ConsoleSpanExporter,
 )
 
-trace.set_tracer_provider(TracerProvider())
-tracer = trace.get_tracer_provider().get_tracer(__name__);
+resource = Resource(attributes={
+    "service.name": "django-server-demo"
+})
 
-trace.get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(ConsoleSpanExporter())
-)
+otlp_exporter = OTLPSpanExporter(
+    endpoint="localhost:63732",
+    insecure=True)
 
+tracer_provider = TracerProvider(resource=resource)
+trace.set_tracer_provider(tracer_provider)
+tracer = trace.get_tracer_provider().get_tracer(__name__)
+
+span_processor_otlp = BatchSpanProcessor(otlp_exporter)
+tracer_provider.add_span_processor(span_processor_otlp)
 
 def home_page_view(request):
-    with tracer.start_as_current_span("foo"):
+    with tracer.start_as_current_span("client"):
      return HttpResponse("Hello, world")
