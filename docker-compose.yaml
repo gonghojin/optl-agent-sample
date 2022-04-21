@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
 
   # Jaeger
@@ -64,6 +64,18 @@ services:
     depends_on:
       - otel-collector
 
+  django-clientr-demo:
+    build:
+      dockerfile: Dockerfile
+      context: ./django/client
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - PYTHON_DEMO_SERVER_ENDPOINT=http://django-server-demo:8000
+    ports:
+      - "8005:8000"
+    depends_on:
+      - django-server-demo
+      
   prometheus:
     container_name: prometheus-v1
     image: prom/prometheus:latest

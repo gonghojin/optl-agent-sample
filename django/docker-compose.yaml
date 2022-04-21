@@ -1,0 +1,19 @@
+version: "3"
+services:
+  django-server-demo:
+    build: ./server
+    ports:
+      - "8002:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      
+  django-client-demo:
+    build: ./client
+    ports:
+      - "8005:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - PYTHON_DEMO_SERVER_ENDPOINT=http://django-server-demo:8000
+    depends_on:
+      - django-server-demo

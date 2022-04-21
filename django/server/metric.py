@@ -9,15 +9,14 @@ from opentelemetry.exporter.otlp.proto.grpc._metric_exporter import (
 from opentelemetry.sdk._metrics import MeterProvider
 from opentelemetry.sdk._metrics.export import (PeriodicExportingMetricReader, ConsoleMetricExporter)
 
-endpoint_ip = os.environ['OTEL_EXPORTER_OTLP_ENDPOINT']
-#endpoint_ip = "localhost"
-#endpoint_port = os.environ['MY_ENDPOINT_PORT']
-#endpoint_port = "4017"
+# exporter = OTLPMetricExporter(endpoint="host.docker.internal:9095", insecure=True)
+endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'host.docker.internal:9095')
 exporter = OTLPMetricExporter(endpoint=endpoint_ip, insecure=True)
 reader = PeriodicExportingMetricReader(exporter, 10000)
 provider = MeterProvider(metric_readers=[reader])
 set_meter_provider(provider)
 meter = get_meter_provider().get_meter("demo-python-server-meter")
+
 
 def observable_counter_func() -> Iterable[Measurement]:
     yield Measurement(1, {})
@@ -30,28 +29,29 @@ def observable_up_down_counter_func() -> Iterable[Measurement]:
 def observable_gauge_func() -> Iterable[Measurement]:
     yield Measurement(9, {})
 
+
 # Counter
-counter = meter.create_counter("counter")
+counter = meter.create_counter("demo-python-server-counter")
 counter.add(1)
 
 # Async Counter
 observable_counter = meter.create_observable_counter(
-    "observable_counter", observable_counter_func
+    "demo-python-server-observable_counter", observable_counter_func
 )
 
 # UpDownCounter
-updown_counter = meter.create_up_down_counter("updown_counter")
+updown_counter = meter.create_up_down_counter("demo-python-server-updown_counter")
 updown_counter.add(1)
 updown_counter.add(-5)
 
 # Async UpDownCounter
 observable_updown_counter = meter.create_observable_up_down_counter(
-    "observable_updown_counter", observable_up_down_counter_func
+    "demo-python-server-observable_updown_counter", observable_up_down_counter_func
 )
 
 # Histogram
-histogram = meter.create_histogram("histogram")
+histogram = meter.create_histogram("demo-python-server-histogram")
 histogram.record(99.9)
 
 # Async Gauge
-gauge = meter.create_observable_gauge("gauge", observable_gauge_func)
+gauge = meter.create_observable_gauge("demo-python-server-gauge", observable_gauge_func)

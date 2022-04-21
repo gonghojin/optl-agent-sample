@@ -1,0 +1,15 @@
+version: "2"
+services:
+  django-server-demo:
+    build: ./
+    ports:
+      - "8002:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      
+  django-client-demo:
+    build: .
+    ports:
+      - "8005:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

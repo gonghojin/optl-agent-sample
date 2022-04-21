@@ -21,9 +21,10 @@ exporters:
       insecure: true
       
   otlp/2:
-    endpoint: ${DOCKER_GATEWAY_HOST:-host.docker.internal}:9095
+    endpoint: host.docker.internal:9095
     tls:
       insecure: true
+
 
 processors:
   batch:
