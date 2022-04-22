@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
@@ -26,11 +27,13 @@ from requests import get
 from sys import argv
 
 resource = Resource(attributes={
-    "service.name": "service"
+    "service.name": "demo-python-client-tracer"
 })
 
+endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'localhost:9095')
+serverIp = os.getenv('PYTHON_DEMO_SERVER_ENDPOINT')
 otlp_exporter = OTLPSpanExporter(
-    endpoint="localhost:9095",
+    endpoint=endpoint_ip,
     insecure=True)
 
 tracer_provider = TracerProvider(resource=resource)
@@ -40,14 +43,15 @@ tracer = trace.get_tracer_provider().get_tracer(__name__)
 span_processor_otlp = BatchSpanProcessor(otlp_exporter)
 tracer_provider.add_span_processor(span_processor_otlp)
 
-with tracer.start_as_current_span("client"):
-    with tracer.start_as_current_span("client-server"):
-        headers = {}
-        inject(headers)
-        requested = get(
-            "http://localhost:8000",
-            params={"param": argv[1]},
-            headers=headers,
-        )
+while True:
+    with tracer.start_as_current_span("demo-python-client"):
+        with tracer.start_as_current_span("demo-python-client-server"):
+            headers = {}
+            inject(headers)
+            requested = get(
+                serverIp,
+                params={"param": argv[1]},
+                headers=headers,
+            )
 
         assert requested.status_code == 200

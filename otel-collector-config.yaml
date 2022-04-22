@@ -20,11 +20,10 @@ exporters:
     tls:
       insecure: true
       
-  otlp/2:
+  otlp:
     endpoint: host.docker.internal:9095
     tls:
       insecure: true
-
 
 processors:
   batch:
@@ -42,8 +41,8 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, zipkin, jaeger]
+      exporters: [logging, zipkin, jaeger, otlp]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, prometheus]
+      exporters: [logging, prometheus, otlp]
