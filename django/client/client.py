@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
+import os, time
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
@@ -31,7 +31,7 @@ resource = Resource(attributes={
 })
 
 endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'localhost:9095')
-serverIp = os.getenv('PYTHON_DEMO_SERVER_ENDPOINT')
+serverIp = os.getenv('PYTHON_DEMO_SERVER_ENDPOINT', 'http://localhost:8002')
 otlp_exporter = OTLPSpanExporter(
     endpoint=endpoint_ip,
     insecure=True)
@@ -55,3 +55,4 @@ while True:
             )
 
         assert requested.status_code == 200
+        time.sleep(10000)

@@ -21,10 +21,10 @@ exporters:
       insecure: true
       
   otlp:
-    endpoint: host.docker.internal:9095
+    endpoint: "http://host.docker.internal:9095"
     tls:
       insecure: true
-
+      
 processors:
   batch:
 
