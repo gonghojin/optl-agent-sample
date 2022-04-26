@@ -50,6 +50,15 @@ services:
     ports:
       - 9200:9200
   
+  ## jaeger-collector만 사용 (elasticsearch에 데이터를 어떻게 저장하는지 확인용)
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector:1.33
+    ports:
+      - "14255:14250"
+    environment:
+      - ES_SERVER_URLS="http://elasticsearch:9200"
+      - SPAN_STORAGE_TYPE=elasticsearch
+      
   ## go app client
   demo-client:
     build:

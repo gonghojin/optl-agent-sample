@@ -10,6 +10,7 @@ exporters:
       label1: value1
 
   logging:
+    ##loglevel: debug
 
   zipkin:
     endpoint: "http://zipkin-all-in-one:9411/api/v2/spans"
@@ -19,7 +20,12 @@ exporters:
     endpoint: jaeger-all-in-one:14250
     tls:
       insecure: true
-      
+
+  jaeger/2:
+    endpoint: "jaeger-collector:14250"
+    tls:
+      insecure: true
+  
   otlp:
     endpoint: "http://host.docker.internal:9095"
     tls:
@@ -41,7 +47,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, zipkin, jaeger, otlp]
+      exporters: [logging, zipkin, jaeger,jaeger/2, otlp]
     metrics:
       receivers: [otlp]
       processors: [batch]
