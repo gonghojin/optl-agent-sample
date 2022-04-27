@@ -23,7 +23,12 @@ exporters:
     endpoint: jaeger-all-in-one:14250
     tls:
       insecure: true
-      
+
+  jaeger/2:
+    endpoint: "jaeger-collector:14250"
+    tls:
+      insecure: true
+  
   otlp:
     endpoint: "http://host.docker.internal:9095"
     tls:
