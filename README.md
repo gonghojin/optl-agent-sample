@@ -7,8 +7,6 @@ Opentelemetry를 사용해서 metric & trace 데이터를 수집하고, 다양�
 ## branch
 + developer
     - 테스트용 메인 브런치
-+ jaeger-exporter-elasticsearch
-    - jaeger에서 elasticsearch에 데이터 저장하는 구조 파악용
   
 ---
 ## 실행 방법

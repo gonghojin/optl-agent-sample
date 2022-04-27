@@ -57,7 +57,7 @@ services:
     ports:
       - "14255:14250"
     environment:
-      - ES_SERVER_URLS="http://elasticsearch:9200"
+      - ES_SERVER_URLS=http://elasticsearch:9200
       - SPAN_STORAGE_TYPE=elasticsearch
 
   zipkin-collector:
