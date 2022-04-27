@@ -38,7 +38,7 @@ SECRET_KEY = "it%*!=l2(fcawu=!m-06n&#j(iq2j#%$fu6)myi*b9i5ojk+6+"
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
