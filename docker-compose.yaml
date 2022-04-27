@@ -41,15 +41,6 @@ services:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
-
-  ## elasticsearch
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - 9200:9200
   
   ## jaeger-collector만 사용 (elasticsearch에 데이터를 어떻게 저장하는지 확인용)
   jaeger-collector:
