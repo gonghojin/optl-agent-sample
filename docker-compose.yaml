@@ -49,20 +49,9 @@ services:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - 9200:9200
-  
-  zipkin-collector:
-    extends:
-      file: docker-compose-zipkin.yml
-      service: zipkin
-    environment:
-      - STORAGE_TYPE=elasticsearch
-      # Point the zipkin at the storage backend
-      - ES_HOSTS=elasticsearch:9200
-      # Uncomment to see requests to and from elasticsearch
-      # - ES_HTTP_LOGGING=BODY
-    depends_on:
-      - elasticsearch
-      
+#    networks:
+#      - elk
+#
   ## go app client
   demo-client:
     build:
@@ -120,3 +109,5 @@ services:
       - ES_HOSTS=elasticsearch
     depends_on:
       - elasticsearch
+#    networks:
+#      - elk
