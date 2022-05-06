@@ -99,15 +99,3 @@ services:
       - "8005:8000"
     depends_on:
       - django-server-demo
-    
-  dependencies:
-    extends:
-      file: docker-compose-zipkin-dependencies.yml
-      service: dependencies
-    environment:
-      - STORAGE_TYPE=elasticsearch
-      - ES_HOSTS=elasticsearch
-    depends_on:
-      - elasticsearch
-#    networks:
-#      - elk
