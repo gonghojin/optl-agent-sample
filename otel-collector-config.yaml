@@ -24,6 +24,12 @@ exporters:
     endpoint: "http://host.docker.internal:9095"
     tls:
       insecure: true
+   
+  otlp/elastic:
+    # Elastic APM server https endpoint without the "https://" prefix
+    endpoint:  "host.docker.internal:8200"
+    tls:
+      insecure: true
       
 processors:
   batch:
