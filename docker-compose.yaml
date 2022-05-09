@@ -30,7 +30,6 @@ services:
       - "55670:55679" # zpages extension
     depends_on:
       - jaeger-all-in-one
-      - jaeger-collector
       - zipkin-all-in-one
   
   ## prometheus
@@ -42,28 +41,6 @@ services:
     ports:
       - "9090:9090"
   
-  ## jaeger-collector만 사용 (elasticsearch에 데이터를 어떻게 저장하는지 확인용)
-  jaeger-collector:
-    image: jaegertracing/jaeger-collector:1.33
-    ports:
-      - "14255:14250"
-    environment:
-      - ES_SERVER_URLS=http://elasticsearch:9200
-      - SPAN_STORAGE_TYPE=elasticsearch
-
-  zipkin-collector:
-    extends:
-      file: docker-compose-zipkin.yml
-      service: zipkin
-    environment:
-      - STORAGE_TYPE=elasticsearch
-      # Point the zipkin at the storage backend
-      - ES_HOSTS=elasticsearch:9200
-      # Uncomment to see requests to and from elasticsearch
-      # - ES_HTTP_LOGGING=BODY
-    depends_on:
-      - elasticsearch
-      
   ## go app client
   demo-client:
     build:
@@ -111,13 +88,3 @@ services:
       - "8005:8000"
     depends_on:
       - django-server-demo
-    
-  dependencies:
-    extends:
-      file: docker-compose-zipkin-dependencies.yml
-      service: dependencies
-    environment:
-      - STORAGE_TYPE=elasticsearch
-      - ES_HOSTS=elasticsearch
-    depends_on:
-      - elasticsearch

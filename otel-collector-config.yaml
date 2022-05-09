@@ -14,23 +14,20 @@ exporters:
   zipkin:
     endpoint: "http://zipkin-all-in-one:9411/api/v2/spans"
     format: proto
-
-  zipkin/v2:
-    endpoint: "http://zipkin-collector:9411/api/v2/spans"
-    format: proto
     
   jaeger:
     endpoint: jaeger-all-in-one:14250
     tls:
       insecure: true
 
-  jaeger/2:
-    endpoint: jaeger-collector:14250
-    tls:
-      insecure: true
-  
   otlp:
     endpoint: "http://host.docker.internal:9095"
+    tls:
+      insecure: true
+   
+  otlp/elastic:
+    # Elastic APM server https endpoint without the "https://" prefix
+    endpoint:  "host.docker.internal:8200"
     tls:
       insecure: true
       
@@ -50,7 +47,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, zipkin, jaeger, jaeger/2, otlp, zipkin/v2]
+      exporters: [logging, zipkin, jaeger, otlp]
     metrics:
       receivers: [otlp]
       processors: [batch]
