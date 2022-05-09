@@ -47,8 +47,8 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, zipkin, jaeger, otlp]
+      exporters: [logging, zipkin, jaeger, otlp,  otlp/elastic]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, prometheus, otlp]
+      exporters: [logging, prometheus, otlp,  otlp/elastic]
