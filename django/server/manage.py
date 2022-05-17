@@ -26,7 +26,11 @@ def main():
         "DJANGO_SETTINGS_MODULE", "instrumentation_example.settings"
     )
 
-    # This call is what makes the Django application be instrumented
+    os.environ.setdefault(
+        "OTEL_RESOURCE_ATTRIBUTES", "service.name=django-server-demo,will_be_overridden=foo, prcoess.uuid=550e8400-e29b-41d4-a716-446655440000"
+    )
+
+# This call is what makes the Django application be instrumented
     DjangoInstrumentor().instrument()
 
     try:
