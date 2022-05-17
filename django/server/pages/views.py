@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+
 from django.http import HttpResponse
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
@@ -24,17 +25,17 @@ from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
 )
 
-resource = Resource(attributes={
-    "service.name": "django-server-demo-tracer",
-})
-
 endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'host.docker.internal:9095')
+resource = Resource.create({
+    "service.name": "django-server-demo-tracer",
+    "prcoess.uuid": "550e8400-e29b-41d4-a716-446655440000"
+})
 
 otlp_exporter = OTLPSpanExporter(
     endpoint=endpoint_ip,
     insecure=True)
 
-tracer_provider = TracerProvider(resource=resource)
+tracer_provider = TracerProvider()
 trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
