@@ -12,14 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+import sys
 import time
 from sys import argv
+import platform
+import socket
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
     OTLPSpanExporter,
 )
-from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.resources import (Resource,ResourceAttributes)
 from opentelemetry.propagate import inject
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
@@ -29,10 +32,23 @@ from requests import get
 
 # import metric
 
-
+auto_resource = {
+    "service.name": "python-client-tracer-demo",
+    "prcoess.uuid" :"550e8400-e29b-41d4-a716-446655442222",
+}
+sys
 resource = Resource.create({
     "service.name": "python-client-tracer-demo",
-    "prcoess.uuid" :"550e8400-e29b-41d4-a716-446655442222"
+    "prcoess.uuid" :"550e8400-e29b-41d4-a716-446655442222",
+    ResourceAttributes.HOST_NAME: socket.gethostname(),
+    ResourceAttributes.PROCESS_COMMAND_ARGS: argv[1],
+    ResourceAttributes.PROCESS_EXECUTABLE_NAME: "client",
+    ResourceAttributes.PROCESS_EXECUTABLE_PATH: sys.executable,
+    ResourceAttributes.PROCESS_OWNER: os.uname()[0],
+    ResourceAttributes.PROCESS_PID: os.getpid(),
+    ResourceAttributes.PROCESS_RUNTIME_DESCRIPTION: ResourceAttributes.PROCESS_RUNTIME_DESCRIPTION,
+    ResourceAttributes.PROCESS_RUNTIME_NAME: argv[0],
+    ResourceAttributes.PROCESS_RUNTIME_VERSION: ResourceAttributes.PROCESS_RUNTIME_VERSION,
 })
 
 os.environ.setdefault(
@@ -46,7 +62,7 @@ otlp_exporter = OTLPSpanExporter(
     insecure=True)
 
 otlp_exporter_collector = OTLPSpanExporter(
-    endpoint='localhost:9095',
+    endpoint='192.168.10.123:9095',
     insecure=True)
 
 tracer_provider = TracerProvider(resource=resource)

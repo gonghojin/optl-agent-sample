@@ -13,13 +13,18 @@
 # limitations under the License.
 
 import os
+import sys
+import time
+from sys import argv
+import platform
+import socket
 
 from django.http import HttpResponse
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
     OTLPSpanExporter,
 )
-from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.resources import (Resource, ResourceAttributes)
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
@@ -28,14 +33,23 @@ from opentelemetry.sdk.trace.export import (
 endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'host.docker.internal:9095')
 resource = Resource.create({
     "service.name": "django-server-demo-tracer",
-    "prcoess.uuid": "550e8400-e29b-41d4-a716-446655440000"
+    "prcoess.uuid": "550e8400-e29b-41d4-a716-446655440000",
+    # ResourceAttributes.HOST_NAME: socket.gethostname(),
+    # ResourceAttributes.PROCESS_COMMAND_ARGS: argv[1],
+    # ResourceAttributes.PROCESS_EXECUTABLE_NAME: "server",
+    # ResourceAttributes.PROCESS_EXECUTABLE_PATH: sys.executable,
+    # ResourceAttributes.PROCESS_OWNER: os.uname()[0],
+    # ResourceAttributes.PROCESS_PID: os.getpid(),
+    # ResourceAttributes.PROCESS_RUNTIME_DESCRIPTION: ResourceAttributes.PROCESS_RUNTIME_DESCRIPTION,
+    # ResourceAttributes.PROCESS_RUNTIME_NAME: argv[0],
+    # ResourceAttributes.PROCESS_RUNTIME_VERSION: ResourceAttributes.PROCESS_RUNTIME_VERSION,
 })
 
 otlp_exporter = OTLPSpanExporter(
     endpoint=endpoint_ip,
     insecure=True)
 
-tracer_provider = TracerProvider()
+tracer_provider = TracerProvider(resource=resource)
 trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 

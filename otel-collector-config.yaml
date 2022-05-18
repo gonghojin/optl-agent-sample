@@ -21,7 +21,7 @@ exporters:
       insecure: true
   
   otlp:
-    endpoint: "http://host.docker.internal:9095"
+    endpoint: "http://192.168.10.24:9095"
     tls:
       insecure: true
   
