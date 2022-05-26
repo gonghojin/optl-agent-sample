@@ -24,6 +24,11 @@ exporters:
     endpoint: "http://192.168.10.123:9095"
     tls:
       insecure: true
+      
+  otlp/nkia:
+    endpoint: "http://192.168.233.227:80"
+    tls:
+      insecure: true
   
   otlp/elastic:
     # Elastic APM server https endpoint without the "https://" prefix
@@ -47,8 +52,8 @@ service:
     traces:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging, zipkin, jaeger, otlp, otlp/elastic ]
+      exporters: [ logging, zipkin, jaeger, otlp, otlp/elastic, otlp/nkia ]
     metrics:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging, prometheus, otlp, otlp/elastic ]
+      exporters: [ logging, prometheus, otlp, otlp/elastic, otlp/nkia ]
