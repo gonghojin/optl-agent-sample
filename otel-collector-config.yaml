@@ -26,7 +26,7 @@ exporters:
       insecure: true
       
   otlp/nkia:
-    endpoint: "http://192.168.233.227:80"
+    endpoint: "http://192.168.233.227:9095"
     tls:
       insecure: true
   
