@@ -18,24 +18,26 @@ import os
 import sys
 
 from opentelemetry.instrumentation.django import DjangoInstrumentor
+from opentelemetry.instrumentation.sqlite3 import SQLite3Instrumentor
+from opentelemetry.instrumentation.elasticsearch import ElasticsearchInstrumentor
 
 # import metric
 import elastic
-
-os.environ.setdefault(
-    "DJANGO_SETTINGS_MODULE", "instrumentation_example.settings"
-)
-
-os.environ.setdefault(
-    "OTEL_RESOURCE_ATTRIBUTES", "service.name=django-server-demo, service.instance.id=550e8400-e29b-41d4-a716-446655440000"
-)
+import traceSqlite
 
 def main():
-
+    os.environ.setdefault(
+        "DJANGO_SETTINGS_MODULE", "instrumentation_example.settings"
+    )
+#"service.instance.id=550e8400-e29b-41d4-a716-446655440000"
+    os.environ.setdefault(
+    "OTEL_RESOURCE_ATTRIBUTES", "service.name=django-server-demo,service.instance.id=550e8400-e29b-41d4-a716-446655440000"
+    )
 # This call is what makes the Django application be instrumented
     DjangoInstrumentor().instrument()
-    elasticTrace = elastic.ElasticTrace()
-    elasticTrace.testTrace()
+    # ElasticsearchInstrumentor().instrument()
+    # elasticTrace = elastic.ElasticTrace()
+    # elasticTrace.testTrace()
 
     try:
         from django.core.management import execute_from_command_line

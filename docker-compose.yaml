@@ -14,7 +14,17 @@ services:
     image: openzipkin/zipkin:latest
     ports:
       - "9411:9411"
-  
+      
+  jaeger-collector:
+    image: jaegertracing/jaeger-opentelemetry-collector
+    ports:
+      - "14255:14250"
+    environment:
+      - ES_SERVER_URLS=http://elasticsearch:9200
+      - SPAN_STORAGE_TYPE=elasticsearch
+    configs:
+      - jaeger_config
+      
   # Collector
   otel-collector:
     image: ${OTELCOL_IMG}
@@ -88,3 +98,4 @@ services:
       - "8005:8000"
     depends_on:
       - django-server-demo
+

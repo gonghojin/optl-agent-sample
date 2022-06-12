@@ -12,34 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+import socket
 import sys
 import time
 from sys import argv
-import platform
-import socket
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
     OTLPSpanExporter,
 )
-from opentelemetry.sdk.resources import (Resource,ResourceAttributes)
 from opentelemetry.propagate import inject
+from opentelemetry.sdk.resources import (Resource, ResourceAttributes)
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
-    BatchSpanProcessor, ConsoleSpanExporter,
-)
+    BatchSpanProcessor, ConsoleSpanExporter)
 from requests import get
 
 # import metric
 
-auto_resource = {
-    "service.name": "python-client-tracer-demo",
-    "prcoess.uuid" :"550e8400-e29b-41d4-a716-446655442222",
-}
-sys
 resource = Resource.create({
     "service.name": "python-client-tracer-demo",
-    "prcoess.uuid" :"550e8400-e29b-41d4-a716-446655442222",
+    "service.instance.id" :"550e8400-e29b-41d4-a716-446655442222",
     ResourceAttributes.HOST_NAME: socket.gethostname(),
     ResourceAttributes.PROCESS_COMMAND_ARGS: argv[1],
     ResourceAttributes.PROCESS_EXECUTABLE_NAME: "client",
@@ -52,7 +45,7 @@ resource = Resource.create({
 })
 
 os.environ.setdefault(
-    "OTEL_RESOURCE_ATTRIBUTES", "service.name=demo-python-client-tracer,prcoess.uuid=550e8400-e29b-41d4-a716-446655442222"
+    "OTEL_RESOURCE_ATTRIBUTES", "service.name=demo-python-client-tracer,service.instance.id=550e8400-e29b-41d4-a716-446655442222"
 )
 
 endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'localhost:9095')
@@ -70,11 +63,10 @@ trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
 span_processor_otlp = BatchSpanProcessor(otlp_exporter)
-#span_processor_otlp = BatchSpanProcessor(otlp_exporter)
 span_processor_otlp_expoter = BatchSpanProcessor(otlp_exporter_collector)
 tracer_provider.add_span_processor(span_processor_otlp)
 tracer_provider.add_span_processor(span_processor_otlp_expoter)
-# tracer_provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
+tracer_provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
 
 while 1:
     with tracer.start_as_current_span("python-client-demo"):

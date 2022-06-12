@@ -5,7 +5,7 @@ from opentelemetry.instrumentation.elasticsearch import ElasticsearchInstrumento
 import elasticsearch
 from abstractTrace import AbstractTrace
 
-ElasticsearchInstrumentor().instrument()
+# ElasticsearchInstrumentor().instrument()
 
 
 class ElasticTrace(AbstractTrace):
