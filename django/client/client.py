@@ -34,12 +34,12 @@ from requests import get
 
 auto_resource = {
     "service.name": "python-client-tracer-demo",
-    "prcoess.uuid" :"550e8400-e29b-41d4-a716-446655442222",
+    "service.instance.id":"550e8400-e29b-41d4-a716-446655442222",
 }
 sys
 resource = Resource.create({
     "service.name": "python-client-tracer-demo",
-    "prcoess.uuid" :"550e8400-e29b-41d4-a716-446655442222",
+    "service.instance.id": "550e8400-e29b-41d4-a716-446655442222",
     ResourceAttributes.HOST_NAME: socket.gethostname(),
     ResourceAttributes.PROCESS_COMMAND_ARGS: argv[1],
     ResourceAttributes.PROCESS_EXECUTABLE_NAME: "client",
@@ -52,7 +52,7 @@ resource = Resource.create({
 })
 
 os.environ.setdefault(
-    "OTEL_RESOURCE_ATTRIBUTES", "service.name=demo-python-client-tracer,prcoess.uuid=550e8400-e29b-41d4-a716-446655442222"
+    "OTEL_RESOURCE_ATTRIBUTES", "service.name=demo-python-client-tracer,service.instance.id=550e8400-e29b-41d4-a716-446655442222"
 )
 
 endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'localhost:9095')
