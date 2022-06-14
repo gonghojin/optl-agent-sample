@@ -19,27 +19,22 @@ import sys
 
 from opentelemetry.instrumentation.django import DjangoInstrumentor
 
-# import metric
-import elastic
-
-os.environ.setdefault(
-    "DJANGO_SETTINGS_MODULE", "instrumentation_example.settings"
-)
-
-os.environ.setdefault(
-    "OTEL_RESOURCE_ATTRIBUTES", "service.name=django-server-demo, service.instance.id=550e8400-e29b-41d4-a716-446655440000"
-)
+import metric
 
 def main():
+    os.environ.setdefault(
+        "DJANGO_SETTINGS_MODULE", "instrumentation_example.settings"
+    )
+
+    os.environ.setdefault(
+        "OTEL_RESOURCE_ATTRIBUTES", "service.name=django-server-demo, service.instance.id=550e8400-e29b-41d4-a716-446655440000"
+    )
 
 # This call is what makes the Django application be instrumented
     DjangoInstrumentor().instrument()
-    elasticTrace = elastic.ElasticTrace()
-    elasticTrace.testTrace()
 
     try:
         from django.core.management import execute_from_command_line
-
     except ImportError as exc:
         raise ImportError(
             "Couldn't import Django. Are you sure it's installed and "

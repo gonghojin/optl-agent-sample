@@ -33,7 +33,7 @@ from opentelemetry.sdk.trace.export import (
 endpoint_ip = os.getenv('OTEL_EXPORTER_OTLP_ENDPOINT', 'host.docker.internal:9095')
 resource = Resource.create({
     "service.name": "django-server-demo-tracer",
-    "prcoess.uuid": "550e8400-e29b-41d4-a716-446655440000",
+    "service.instance.id": "550e8400-e29b-41d4-a716-446655440000",
     # ResourceAttributes.HOST_NAME: socket.gethostname(),
     # ResourceAttributes.PROCESS_COMMAND_ARGS: argv[1],
     # ResourceAttributes.PROCESS_EXECUTABLE_NAME: "server",
