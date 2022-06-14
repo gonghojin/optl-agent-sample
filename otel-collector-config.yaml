@@ -20,11 +20,11 @@ exporters:
     tls:
       insecure: true
   
-  otlp:
-    endpoint: "http://192.168.10.123:9095"
-    tls:
-      insecure: true
-      
+#  otlp:
+#    endpoint: "http://192.168.10.123:9095"
+#    tls:
+#      insecure: true
+#
   otlp/nkia:
     endpoint: "http://192.168.233.227:9095"
     tls:
@@ -52,8 +52,8 @@ service:
     traces:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging, zipkin, jaeger, otlp, otlp/elastic, otlp/nkia ]
+      exporters: [ logging, zipkin, jaeger, otlp/elastic, otlp/nkia ]
     metrics:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ logging, prometheus, otlp, otlp/elastic, otlp/nkia ]
+      exporters: [ logging, prometheus, otlp/elastic, otlp/nkia ]
