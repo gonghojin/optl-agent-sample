@@ -3,4 +3,5 @@ RUN mkdir /app
 COPY . ./app
 WORKDIR /app
 RUN pip install -r requirements.txt
-CMD ["python","client.py", "runserver", "hello"]
+CMD ["python","client.py", "client-hello"]
+CMD ["python","clientError.py", "clientError-hello"]
