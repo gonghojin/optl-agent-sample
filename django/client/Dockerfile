@@ -5,3 +5,4 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 CMD ["python","client.py", "client-hello"]
 CMD ["python","clientError.py", "clientError-hello"]
+CMD ["python","clientErrorSqlite.py", "clientError-hello"]

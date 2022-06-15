@@ -10,11 +10,10 @@ load_dotenv()
 while 1:
     headers = {}
     requested = get(
-        serverIp + "/polls/error",
-        params={"param": argv[1]},
+        serverIp + "/polls/error-sqlite",
+        # params={"param": argv[1]},
         headers=headers,
-    )
-
-    assert requested.status_code == 400
+        )
+    assert requested.status_code == 500
     print(requested)
     time.sleep(int(os.getenv("timeSleep")))

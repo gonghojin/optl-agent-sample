@@ -5,6 +5,7 @@ certifi==2022.5.18.1
 charset-normalizer==2.0.12
 Deprecated==1.2.13
 Django==4.0.5
+elastic-apm==6.9.1
 elastic-transport==8.1.2
 elasticsearch==7.17.4
 googleapis-common-protos==1.56.2
@@ -16,9 +17,19 @@ opentelemetry-exporter-otlp==1.11.1
 opentelemetry-exporter-otlp-proto-grpc==1.11.1
 opentelemetry-exporter-otlp-proto-http==1.11.1
 opentelemetry-instrumentation==0.31b0
+opentelemetry-instrumentation-asgi==0.31b0
+opentelemetry-instrumentation-aws-lambda==0.31b0
+opentelemetry-instrumentation-dbapi==0.31b0
 opentelemetry-instrumentation-django==0.31b0
 opentelemetry-instrumentation-elasticsearch==0.31b0
+opentelemetry-instrumentation-grpc==0.31b0
+opentelemetry-instrumentation-logging==0.31b0
+opentelemetry-instrumentation-requests==0.31b0
+opentelemetry-instrumentation-sqlite3==0.31b0
+opentelemetry-instrumentation-urllib==0.31b0
+opentelemetry-instrumentation-urllib3==0.31b0
 opentelemetry-instrumentation-wsgi==0.31b0
+opentelemetry-propagator-aws-xray==1.0.1
 opentelemetry-proto==1.11.1
 opentelemetry-sdk==1.12.0rc1
 opentelemetry-semantic-conventions==0.31b0
