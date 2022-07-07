@@ -1,6 +1,6 @@
  #! /bin/bash
 
-COMMAND="docker compose -f docker-compose.yaml -f docker-compose-elk.yml -f extensions/apm-server/apm-server-compose.yml"
+COMMAND="docker-compose -f docker-compose.yaml -f docker-compose-elk.yml -f extensions/apm-server/apm-server-compose.yml"
 
 if [ $# -eq 1 ]; then
   if [ "$1" == "-build" ]; then
